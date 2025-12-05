@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, String, Boolean, Text, ForeignKey
+from sqlalchemy import Column, Integer, String, Boolean, Text, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
+from datetime import datetime
 from .database import Base
 
 class User(Base):
@@ -21,6 +22,10 @@ class DayTask(Base):
     notes = Column(Text, nullable=True)
     code_snippet = Column(Text, nullable=True)
     month = Column(Integer)
+    
+    # Timestamps
+    completed_at = Column(DateTime, nullable=True)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
     # For simple reminder logic
     is_weekend = Column(Boolean, default=False)

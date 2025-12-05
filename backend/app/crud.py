@@ -76,11 +76,25 @@ def get_task(db: Session, day_id: int):
     return db.query(models.DayTask).filter(models.DayTask.id == day_id).first()
 
 def update_task(db: Session, day_id: int, task_update: schemas.DayTaskCreate):
+    from datetime import datetime
+    
     db_task = db.query(models.DayTask).filter(models.DayTask.id == day_id).first()
     if db_task:
+        # Track previous status
+        previous_status = db_task.status
+        
+        # Update fields
         db_task.status = task_update.status
         db_task.notes = task_update.notes
         db_task.code_snippet = task_update.code_snippet
+        
+        # Set completed_at timestamp when status changes to Completed
+        if task_update.status == "Completed" and previous_status != "Completed":
+            db_task.completed_at = datetime.utcnow()
+        # Clear completed_at if status changes from Completed to something else
+        elif task_update.status != "Completed" and previous_status == "Completed":
+            db_task.completed_at = None
+            
         db.commit()
         db.refresh(db_task)
     return db_task

@@ -109,17 +109,58 @@ const Dashboard = () => {
         );
     }
 
-    // Prepare data for chart (mock weekly data for now based on roadmap)
-    // In a real app, this would be aggregated from actual dates
-    const chartData = [
-        { name: 'Mon', completed: 2 },
-        { name: 'Tue', completed: 4 },
-        { name: 'Wed', completed: 1 },
-        { name: 'Thu', completed: 3 },
-        { name: 'Fri', completed: 5 },
-        { name: 'Sat', completed: 2 },
-        { name: 'Sun', completed: 0 },
-    ];
+    // Calculate real weekly activity from roadmap data
+    const calculateWeeklyActivity = () => {
+        if (!roadmap || roadmap.length === 0) {
+            return [
+                { name: 'Mon', completed: 0 },
+                { name: 'Tue', completed: 0 },
+                { name: 'Wed', completed: 0 },
+                { name: 'Thu', completed: 0 },
+                { name: 'Fri', completed: 0 },
+                { name: 'Sat', completed: 0 },
+                { name: 'Sun', completed: 0 },
+            ];
+        }
+
+        // Get current date and calculate the start of the current week (Monday)
+        const now = new Date();
+        const dayOfWeek = now.getDay(); // 0 = Sunday, 1 = Monday, etc.
+        const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek; // Adjust to get Monday
+        const monday = new Date(now);
+        monday.setDate(now.getDate() + mondayOffset);
+        monday.setHours(0, 0, 0, 0);
+
+        // Initialize weekly data
+        const weeklyData = {
+            'Mon': 0, 'Tue': 0, 'Wed': 0, 'Thu': 0, 'Fri': 0, 'Sat': 0, 'Sun': 0
+        };
+        const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+        // Count completed tasks for each day of the current week
+        roadmap.forEach(task => {
+            if (task.status === 'Completed' && task.completed_at) {
+                const completedDate = new Date(task.completed_at);
+                // Check if completed this week
+                if (completedDate >= monday && completedDate <= now) {
+                    const dayName = dayNames[completedDate.getDay()];
+                    weeklyData[dayName]++;
+                }
+            }
+        });
+
+        return [
+            { name: 'Mon', completed: weeklyData['Mon'] },
+            { name: 'Tue', completed: weeklyData['Tue'] },
+            { name: 'Wed', completed: weeklyData['Wed'] },
+            { name: 'Thu', completed: weeklyData['Thu'] },
+            { name: 'Fri', completed: weeklyData['Fri'] },
+            { name: 'Sat', completed: weeklyData['Sat'] },
+            { name: 'Sun', completed: weeklyData['Sun'] },
+        ];
+    };
+
+    const chartData = calculateWeeklyActivity();
 
     return (
         <div className="space-y-8">

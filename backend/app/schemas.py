@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from typing import Optional, List
+from datetime import datetime
 
 class DayTaskBase(BaseModel):
     day_number: int
@@ -16,9 +17,11 @@ class DayTaskCreate(DayTaskBase):
 
 class DayTask(DayTaskBase):
     id: int
+    completed_at: Optional[datetime] = None
+    updated_at: Optional[datetime] = None
 
     class Config:
-        orm_mode = True
+        from_attributes = True  # Updated for Pydantic v2
 
 class Stats(BaseModel):
     total_days: int
