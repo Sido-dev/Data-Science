@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from .database import engine, Base, SessionLocal
-from .routers import roadmap
+from .routers import roadmap, activity
 from . import models
 
 # Create tables
@@ -28,6 +28,7 @@ app.add_middleware(
 )
 
 app.include_router(roadmap.router, prefix="/api")
+app.include_router(activity.router, prefix="/api")
 
 # Seed Data removed in favor of user-specific roadmap generation
 

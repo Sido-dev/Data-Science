@@ -43,3 +43,20 @@ class User(UserBase):
 
     class Config:
         orm_mode = True
+
+class UserActivityBase(BaseModel):
+    activity_type: str
+    session_id: Optional[str] = None
+    meta_info: Optional[str] = None  # JSON string
+
+class UserActivityCreate(UserActivityBase):
+    pass
+
+class UserActivity(UserActivityBase):
+    id: int
+    user_id: int
+    timestamp: datetime
+    
+    class Config:
+        from_attributes = True
+

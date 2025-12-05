@@ -10,6 +10,10 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String)
     is_active = Column(Boolean, default=True)
+    
+    # Relationships
+    tasks = relationship("DayTask", back_populates="owner")
+    activities = relationship("UserActivity", back_populates="user")
 
 class DayTask(Base):
     __tablename__ = "day_tasks"
@@ -33,4 +37,20 @@ class DayTask(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
     owner = relationship("User", back_populates="tasks")
 
-User.tasks = relationship("DayTask", back_populates="owner")
+class UserActivity(Base):
+    __tablename__ = "user_activity"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), index=True)
+    
+    # Activity tracking
+    activity_type = Column(String, index=True)  # login, logout, task_viewed, task_updated, etc.
+    timestamp = Column(DateTime, default=datetime.utcnow, index=True)
+    session_id = Column(String, index=True, nullable=True)
+    
+    # Additional context (stored as JSON for flexibility)
+    meta_info = Column(Text, nullable=True)  # JSON string: {device, browser, ip, etc.}
+    
+    # Relationship
+    user = relationship("User", back_populates="activities")
+
