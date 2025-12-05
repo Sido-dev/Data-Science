@@ -34,9 +34,20 @@ const useStore = create((set, get) => ({
             get().fetchStats();
         } catch (error) {
             console.error("Login failed", error);
-            // Fallback for offline/demo if backend fails (optional, but good for robustness)
-            // For now, we want to enforce backend usage for the "journey" feature.
-            set({ error: "Login failed. Please try again." });
+            let errorMessage = "Login failed. Please try again.";
+
+            if (error.response?.data?.detail) {
+                const detail = error.response.data.detail;
+                if (Array.isArray(detail)) {
+                    errorMessage = detail.map(err => err.msg || JSON.stringify(err)).join(', ');
+                } else if (typeof detail === 'string') {
+                    errorMessage = detail;
+                }
+            } else if (error.message) {
+                errorMessage = error.message;
+            }
+
+            set({ error: errorMessage });
         }
     },
 
@@ -57,7 +68,23 @@ const useStore = create((set, get) => ({
             set({ roadmap: res.data, loading: false, error: null });
         } catch (error) {
             console.error("Failed to fetch roadmap", error);
-            const errorMessage = error.response?.data?.detail || error.message || "Failed to load roadmap";
+            let errorMessage = "Failed to load roadmap";
+
+            // Extract error message from various error formats
+            if (error.response?.data?.detail) {
+                const detail = error.response.data.detail;
+                // Handle array of validation errors
+                if (Array.isArray(detail)) {
+                    errorMessage = detail.map(err => err.msg || JSON.stringify(err)).join(', ');
+                } else if (typeof detail === 'string') {
+                    errorMessage = detail;
+                } else {
+                    errorMessage = JSON.stringify(detail);
+                }
+            } else if (error.message) {
+                errorMessage = error.message;
+            }
+
             set({ loading: false, error: errorMessage });
         }
     },
@@ -74,7 +101,23 @@ const useStore = create((set, get) => ({
             set({ stats: res.data, error: null });
         } catch (error) {
             console.error("Failed to fetch stats", error);
-            const errorMessage = error.response?.data?.detail || error.message || "Failed to load statistics";
+            let errorMessage = "Failed to load statistics";
+
+            // Extract error message from various error formats
+            if (error.response?.data?.detail) {
+                const detail = error.response.data.detail;
+                // Handle array of validation errors
+                if (Array.isArray(detail)) {
+                    errorMessage = detail.map(err => err.msg || JSON.stringify(err)).join(', ');
+                } else if (typeof detail === 'string') {
+                    errorMessage = detail;
+                } else {
+                    errorMessage = JSON.stringify(detail);
+                }
+            } else if (error.message) {
+                errorMessage = error.message;
+            }
+
             set({ error: errorMessage });
         }
     },
@@ -88,7 +131,19 @@ const useStore = create((set, get) => ({
             get().fetchStats(); // Refresh stats
         } catch (error) {
             console.error("Failed to update day", error);
-            const errorMessage = error.response?.data?.detail || error.message || "Failed to update task";
+            let errorMessage = "Failed to update task";
+
+            if (error.response?.data?.detail) {
+                const detail = error.response.data.detail;
+                if (Array.isArray(detail)) {
+                    errorMessage = detail.map(err => err.msg || JSON.stringify(err)).join(', ');
+                } else if (typeof detail === 'string') {
+                    errorMessage = detail;
+                }
+            } else if (error.message) {
+                errorMessage = error.message;
+            }
+
             set({ error: errorMessage });
         }
     },
