@@ -26,30 +26,44 @@ const StatCard = ({ label, value, icon: Icon, color, delay }) => (
 const Dashboard = () => {
     const { stats, fetchStats, roadmap, fetchRoadmap, error, clearError } = useStore();
     const [isRetrying, setIsRetrying] = React.useState(false);
+    const [loadingTimeout, setLoadingTimeout] = React.useState(false);
 
     useEffect(() => {
         fetchStats();
         if (roadmap.length === 0) fetchRoadmap();
+
+        // Set a timeout to detect if loading is stuck
+        const timeout = setTimeout(() => {
+            if (!stats && !error) {
+                setLoadingTimeout(true);
+            }
+        }, 10000); // 10 seconds timeout
+
+        return () => clearTimeout(timeout);
     }, []);
 
     const handleRetry = async () => {
         setIsRetrying(true);
+        setLoadingTimeout(false);
         clearError();
         await Promise.all([fetchStats(), fetchRoadmap()]);
         setIsRetrying(false);
     };
 
     // Show error state with retry button
-    if (error) {
+    if (error || loadingTimeout) {
         return (
             <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-6">
                 <div className="text-center space-y-4">
                     <div className="text-6xl">⚠️</div>
                     <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
-                        Oops! Something went wrong
+                        {loadingTimeout ? "Connection Timeout" : "Oops! Something went wrong"}
                     </h2>
                     <p className="text-gray-600 dark:text-gray-400 max-w-md">
-                        {error}
+                        {loadingTimeout
+                            ? "The server is taking too long to respond. Please check if the backend is running."
+                            : error
+                        }
                     </p>
                 </div>
                 <button
