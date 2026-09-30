@@ -1,0 +1,591 @@
+{
+  "modules": [
+    {
+      "id": "python",
+      "title": "Python foundations",
+      "phase": "Foundations",
+      "hours": 4,
+      "track": "both",
+      "requires": [],
+      "summary": "Use variables, collections, loops and functions to turn a question into a repeatable calculation.",
+      "lesson": [
+        "A list stores an ordered collection. A dictionary maps unique keys to values. Choose the structure that matches your data.",
+        "Write small functions with explicit inputs and outputs. Test the empty input and the usual case before working with a larger dataset."
+      ],
+      "tasks": [
+        "Write a function that computes total revenue from a list of prices.",
+        "Handle an empty list and explain your return value."
+      ],
+      "resources": [
+        {
+          "label": "Python tutorial",
+          "url": "https://docs.python.org/3/tutorial/"
+        }
+      ]
+    },
+    {
+      "id": "pandas",
+      "title": "Explore and clean data",
+      "phase": "Foundations",
+      "hours": 5,
+      "track": "both",
+      "requires": [
+        "python"
+      ],
+      "summary": "Inspect a table, find missing values and build a documented cleaning process.",
+      "lesson": [
+        "Start by checking shape, column types, missing values and duplicate keys. A missing value can mean unknown, unavailable or not applicable.",
+        "Avoid filling every missing value with zero. Decide using the meaning of the column and document what changed."
+      ],
+      "tasks": [
+        "Load a CSV and produce a missing-value summary.",
+        "Create a cleaned copy and document three decisions."
+      ],
+      "resources": [
+        {
+          "label": "pandas getting started",
+          "url": "https://pandas.pydata.org/docs/getting_started/intro_tutorials/"
+        }
+      ]
+    },
+    {
+      "id": "sql",
+      "title": "SQL for analysis",
+      "phase": "Foundations",
+      "hours": 5,
+      "track": "both",
+      "requires": [],
+      "summary": "Filter, aggregate and join tables without losing sight of the grain of your data.",
+      "lesson": [
+        "The grain describes what one row represents. Confirm the grain before a join so that repeated keys do not silently multiply your totals.",
+        "WHERE filters rows before aggregation. HAVING filters groups after aggregation. COUNT(column) excludes nulls; COUNT(*) counts rows."
+      ],
+      "tasks": [
+        "Calculate revenue by customer using GROUP BY.",
+        "Compare row counts before and after joining an orders table."
+      ],
+      "resources": [
+        {
+          "label": "PostgreSQL tutorial",
+          "url": "https://www.postgresql.org/docs/current/tutorial.html"
+        }
+      ]
+    },
+    {
+      "id": "statistics",
+      "title": "Statistics that explain",
+      "phase": "Foundations",
+      "hours": 4,
+      "track": "both",
+      "requires": [
+        "pandas"
+      ],
+      "summary": "Describe variation, compare groups and communicate uncertainty.",
+      "lesson": [
+        "The mean is sensitive to extreme observations. The median is often a useful companion when a distribution is skewed.",
+        "Correlation describes association, not causation. Confounding variables and selection effects can explain an apparent relationship."
+      ],
+      "tasks": [
+        "Compare mean and median for a skewed price column.",
+        "Describe one conclusion your dataset cannot support."
+      ],
+      "resources": [
+        {
+          "label": "OpenIntro Statistics",
+          "url": "https://www.openintro.org/book/os/"
+        }
+      ]
+    },
+    {
+      "id": "visuals",
+      "title": "Visual storytelling",
+      "phase": "Analysis",
+      "hours": 4,
+      "track": "both",
+      "requires": [
+        "statistics"
+      ],
+      "summary": "Choose a chart that answers a question and write an evidence-based takeaway.",
+      "lesson": [
+        "Use bars for category comparisons and lines for time trends. A scatter plot helps inspect relationships between numeric variables.",
+        "Label units and show the relevant baseline. Write a title that makes the question clear and avoid implying precision the data does not support."
+      ],
+      "tasks": [
+        "Create one comparison chart and one trend chart.",
+        "Add a takeaway and a limitation below each chart."
+      ],
+      "resources": [
+        {
+          "label": "Matplotlib tutorials",
+          "url": "https://matplotlib.org/stable/tutorials/index.html"
+        }
+      ]
+    },
+    {
+      "id": "windows",
+      "title": "Advanced SQL patterns",
+      "phase": "Analysis",
+      "hours": 5,
+      "track": "both",
+      "requires": [
+        "sql"
+      ],
+      "summary": "Use CTEs and window functions for rankings, running totals and comparisons.",
+      "lesson": [
+        "GROUP BY collapses rows; a window function calculates across related rows while retaining each row. PARTITION BY defines the groups for a window.",
+        "Use explicit ordering for running calculations. Ties behave differently in ROW_NUMBER, RANK and DENSE_RANK."
+      ],
+      "tasks": [
+        "Rank customers by revenue within each region.",
+        "Calculate a running total with an explicit window frame."
+      ],
+      "resources": [
+        {
+          "label": "PostgreSQL window functions",
+          "url": "https://www.postgresql.org/docs/current/tutorial-window.html"
+        }
+      ]
+    },
+    {
+      "id": "bi",
+      "title": "Build a useful dashboard",
+      "phase": "Applied work",
+      "hours": 6,
+      "track": "analyst",
+      "requires": [
+        "visuals",
+        "windows"
+      ],
+      "summary": "Turn a business question into a small, readable dashboard with defined metrics.",
+      "lesson": [
+        "Define each metric, its time range and the decision it supports before choosing visuals. A dashboard should help someone decide what to do next.",
+        "Check filter behaviour and reconcile totals against a source query. A visually polished dashboard can still be wrong."
+      ],
+      "tasks": [
+        "Define revenue, order count and average order value.",
+        "Build a dashboard and reconcile its totals to SQL."
+      ],
+      "resources": [
+        {
+          "label": "Microsoft Power BI learning",
+          "url": "https://learn.microsoft.com/en-us/training/powerplatform/power-bi/"
+        }
+      ]
+    },
+    {
+      "id": "experiments",
+      "title": "Experiments and decisions",
+      "phase": "Applied work",
+      "hours": 4,
+      "track": "analyst",
+      "requires": [
+        "statistics"
+      ],
+      "summary": "Frame a hypothesis, choose a metric and recognise the limits of an experiment.",
+      "lesson": [
+        "Choose a primary outcome and success criterion before observing results. Random assignment helps reduce confounding.",
+        "Statistical significance is not the same as practical value. Consider effect size, uncertainty and the cost of implementation."
+      ],
+      "tasks": [
+        "Draft an experiment for a checkout change.",
+        "Specify a primary metric and a guardrail metric."
+      ],
+      "resources": [
+        {
+          "label": "OpenIntro Statistics",
+          "url": "https://www.openintro.org/book/os/"
+        }
+      ]
+    },
+    {
+      "id": "features",
+      "title": "Features and validation",
+      "phase": "Machine learning",
+      "hours": 5,
+      "track": "scientist",
+      "requires": [
+        "statistics"
+      ],
+      "summary": "Create a reproducible train/test split and prevent leakage.",
+      "lesson": [
+        "Split data before fitting transformations. A preprocessing step fitted on all observations can leak information from the test set into training.",
+        "Choose validation that matches the problem: chronological splits for future prediction and group-aware splits for repeated entities."
+      ],
+      "tasks": [
+        "Create a held-out test set and a preprocessing pipeline.",
+        "Identify one potential source of leakage."
+      ],
+      "resources": [
+        {
+          "label": "scikit-learn common pitfalls",
+          "url": "https://scikit-learn.org/stable/common_pitfalls.html"
+        }
+      ]
+    },
+    {
+      "id": "models",
+      "title": "Train a baseline model",
+      "phase": "Machine learning",
+      "hours": 6,
+      "track": "scientist",
+      "requires": [
+        "features"
+      ],
+      "summary": "Compare a simple baseline with a model and choose a relevant evaluation metric.",
+      "lesson": [
+        "A baseline establishes whether added complexity helps. Compare against a simple rule such as predicting the majority class or the training mean.",
+        "Accuracy alone can mislead when classes are imbalanced. Examine precision, recall and the confusion matrix in the context of error costs."
+      ],
+      "tasks": [
+        "Fit a dummy baseline and a tree-based model.",
+        "Compare their performance using the same validation split."
+      ],
+      "resources": [
+        {
+          "label": "scikit-learn supervised learning",
+          "url": "https://scikit-learn.org/stable/supervised_learning.html"
+        }
+      ]
+    },
+    {
+      "id": "evaluate",
+      "title": "Explain model behaviour",
+      "phase": "Machine learning",
+      "hours": 4,
+      "track": "scientist",
+      "requires": [
+        "models"
+      ],
+      "summary": "Inspect errors by segment and communicate where a model should not be trusted.",
+      "lesson": [
+        "An overall metric can hide poor performance on a subgroup. Inspect errors across meaningful segments and document small sample sizes.",
+        "Feature importance is a description of a fitted model, not evidence that changing a feature will cause the outcome to change."
+      ],
+      "tasks": [
+        "Review five false predictions and group common errors.",
+        "Write a model card with limitations and intended use."
+      ],
+      "resources": [
+        {
+          "label": "scikit-learn model inspection",
+          "url": "https://scikit-learn.org/stable/inspection.html"
+        }
+      ]
+    },
+    {
+      "id": "portfolio",
+      "title": "Publish your evidence",
+      "phase": "Portfolio",
+      "hours": 4,
+      "track": "both",
+      "requires": [
+        "visuals"
+      ],
+      "summary": "Present a reproducible project with a clear question, evidence and limitations.",
+      "lesson": [
+        "A useful README explains the problem, data source, setup, approach and findings. Include the exact command needed to reproduce the work.",
+        "Separate measured outcomes from hypothetical opportunities. Link your notebook or dashboard and acknowledge dataset limitations."
+      ],
+      "tasks": [
+        "Publish a repository with a reproducible README.",
+        "Write three findings supported by a table or chart."
+      ],
+      "resources": [
+        {
+          "label": "GitHub README guide",
+          "url": "https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-readmes"
+        }
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "id": "q1",
+      "module": "python",
+      "prompt": "Which collection maps unique keys to values?",
+      "options": [
+        "List",
+        "Dictionary",
+        "Tuple",
+        "String"
+      ],
+      "answer": 1,
+      "explanation": "A dictionary stores key-value pairs; each key identifies one value."
+    },
+    {
+      "id": "q2",
+      "module": "python",
+      "prompt": "What does a function return if it reaches the end without a return statement?",
+      "options": [
+        "0",
+        "An empty string",
+        "None",
+        "False"
+      ],
+      "answer": 2,
+      "explanation": "Python returns None when no explicit return value is supplied."
+    },
+    {
+      "id": "q3",
+      "module": "pandas",
+      "prompt": "What is the best first step before filling missing values?",
+      "options": [
+        "Replace all with zero",
+        "Delete every affected row",
+        "Inspect why values are missing",
+        "Convert every column to text"
+      ],
+      "answer": 2,
+      "explanation": "The meaning and pattern of missing data should guide the treatment."
+    },
+    {
+      "id": "q4",
+      "module": "pandas",
+      "prompt": "Which operation summarises revenue by region in pandas?",
+      "options": [
+        "groupby followed by sum",
+        "sort_values only",
+        "drop_duplicates only",
+        "rename"
+      ],
+      "answer": 0,
+      "explanation": "Grouping by region and summing revenue creates one aggregate per region."
+    },
+    {
+      "id": "q5",
+      "module": "sql",
+      "prompt": "Which clause filters aggregated groups?",
+      "options": [
+        "WHERE",
+        "ORDER BY",
+        "HAVING",
+        "LIMIT"
+      ],
+      "answer": 2,
+      "explanation": "HAVING applies conditions to groups after aggregation."
+    },
+    {
+      "id": "q6",
+      "module": "sql",
+      "prompt": "What does COUNT(column_name) count?",
+      "options": [
+        "All rows including nulls",
+        "Distinct values only",
+        "Only zero values",
+        "Non-null values"
+      ],
+      "answer": 3,
+      "explanation": "COUNT(column_name) excludes null values. COUNT(*) counts rows."
+    },
+    {
+      "id": "q7",
+      "module": "statistics",
+      "prompt": "Which statistic is generally less sensitive to extreme outliers?",
+      "options": [
+        "Mean",
+        "Median",
+        "Maximum",
+        "Range"
+      ],
+      "answer": 1,
+      "explanation": "The median depends on rank rather than the magnitude of extreme values."
+    },
+    {
+      "id": "q8",
+      "module": "statistics",
+      "prompt": "A strong correlation by itself establishes\u2026",
+      "options": [
+        "A causal effect",
+        "An association",
+        "Random assignment",
+        "No confounding"
+      ],
+      "answer": 1,
+      "explanation": "Correlation measures association. A causal claim needs additional evidence."
+    },
+    {
+      "id": "q9",
+      "module": "visuals",
+      "prompt": "Which chart is a natural starting point for monthly revenue trends?",
+      "options": [
+        "Pie chart",
+        "Line chart",
+        "Word cloud",
+        "Unlabelled scatter plot"
+      ],
+      "answer": 1,
+      "explanation": "A line chart displays ordered observations over time."
+    },
+    {
+      "id": "q10",
+      "module": "windows",
+      "prompt": "How does a window function differ from GROUP BY?",
+      "options": [
+        "It always removes duplicates",
+        "It retains individual rows",
+        "It requires two tables",
+        "It only handles strings"
+      ],
+      "answer": 1,
+      "explanation": "Window functions calculate over related rows without collapsing each group."
+    },
+    {
+      "id": "q11",
+      "module": "features",
+      "prompt": "When should a scaler be fitted?",
+      "options": [
+        "On all rows before splitting",
+        "On test data only",
+        "On the training split only",
+        "On predicted labels"
+      ],
+      "answer": 2,
+      "explanation": "Fit preprocessing on training data and apply the learned transformation to other splits."
+    },
+    {
+      "id": "q12",
+      "module": "models",
+      "prompt": "For a rare positive class, what should accompany accuracy?",
+      "options": [
+        "Only training time",
+        "Precision and recall",
+        "The number of features only",
+        "No other metric"
+      ],
+      "answer": 1,
+      "explanation": "Precision and recall help expose performance on the rare positive class."
+    },
+    {
+      "id": "q13",
+      "module": "evaluate",
+      "prompt": "Feature importance proves a feature causes the outcome.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "answer": 1,
+      "explanation": "Importance describes the model, not a causal intervention."
+    },
+    {
+      "id": "q14",
+      "module": "bi",
+      "prompt": "What should happen before selecting dashboard charts?",
+      "options": [
+        "Add animations",
+        "Define metrics and decisions",
+        "Choose as many colours as possible",
+        "Hide the time range"
+      ],
+      "answer": 1,
+      "explanation": "Metric definitions and intended decisions determine what the dashboard needs to show."
+    },
+    {
+      "id": "q15",
+      "module": "experiments",
+      "prompt": "A statistically significant effect is always worth implementing.",
+      "options": [
+        "True",
+        "False"
+      ],
+      "answer": 1,
+      "explanation": "Practical value also depends on effect size, uncertainty, risks and implementation costs."
+    }
+  ],
+  "projects": [
+    {
+      "id": "retail",
+      "title": "What drives retail revenue?",
+      "tag": "Data Analyst",
+      "summary": "Turn transaction data into a decision-ready sales report.",
+      "dataset": "UCI Online Retail",
+      "url": "https://archive.ics.uci.edu/dataset/352/online+retail",
+      "milestones": [
+        "Document the grain, missing values, cancellations and dataset licence.",
+        "Calculate revenue and order trends; explain how returns are treated.",
+        "Build a dashboard with three defined KPIs and useful filters.",
+        "Publish three supported findings, limitations and a reproducible README."
+      ],
+      "rubric": [
+        "Correctness: totals reconcile with source queries.",
+        "Clarity: charts explain a specific business question.",
+        "Reproducibility: someone else can run your workflow."
+      ]
+    },
+    {
+      "id": "housing",
+      "title": "Predict prices, explain errors",
+      "tag": "Data Scientist",
+      "summary": "Build a regression baseline and investigate where it fails.",
+      "dataset": "scikit-learn California housing",
+      "url": "https://scikit-learn.org/stable/modules/generated/sklearn.datasets.fetch_california_housing.html",
+      "milestones": [
+        "Document the dataset, target, units and intended use.",
+        "Create a train/test split and fit preprocessing on training data only.",
+        "Compare a dummy baseline and one model using MAE.",
+        "Inspect errors by segment and publish a model card."
+      ],
+      "rubric": [
+        "Validation: the test set stays outside model selection.",
+        "Evidence: report baseline and model on identical splits.",
+        "Judgement: discuss historical data and deployment limits."
+      ]
+    },
+    {
+      "id": "cohorts",
+      "title": "Understand customer retention",
+      "tag": "Data Analyst",
+      "summary": "Use SQL to compare customer cohorts and write a retention brief.",
+      "dataset": "UCI Online Retail",
+      "url": "https://archive.ics.uci.edu/dataset/352/online+retail",
+      "milestones": [
+        "Define an eligible customer and a completed purchase.",
+        "Assign each customer a first-purchase cohort in SQL.",
+        "Calculate monthly retention with incomplete cohorts clearly labelled.",
+        "Publish a cohort chart and two testable follow-up hypotheses."
+      ],
+      "rubric": [
+        "Definitions: numerator and denominator are explicit.",
+        "Quality: handle missing customer IDs and returns.",
+        "Honesty: distinguish observation from causation."
+      ]
+    }
+  ],
+  "exercises": [
+    {
+      "id": "sql-revenue",
+      "language": "SQL",
+      "title": "Revenue by customer",
+      "prompt": "Given orders(customer_id, amount, status), return total paid revenue by customer, highest first. Exclude unpaid orders.",
+      "starter": "-- Write your query here\nSELECT ",
+      "solution": "SELECT customer_id, SUM(amount) AS revenue\nFROM orders\nWHERE status = 'paid'\nGROUP BY customer_id\nORDER BY revenue DESC;",
+      "explanation": "Filter paid rows before aggregating. Group by customer and order by the computed sum."
+    },
+    {
+      "id": "sql-rank",
+      "language": "SQL",
+      "title": "Rank customers within regions",
+      "prompt": "Given customer_sales(region, customer_id, revenue), add a dense rank within each region, with highest revenue first.",
+      "starter": "SELECT region, customer_id, revenue,\n",
+      "solution": "SELECT region, customer_id, revenue,\n  DENSE_RANK() OVER (PARTITION BY region ORDER BY revenue DESC) AS revenue_rank\nFROM customer_sales;",
+      "explanation": "PARTITION BY restarts ranking for each region. DENSE_RANK gives tied revenues the same rank without gaps."
+    },
+    {
+      "id": "py-total",
+      "language": "Python",
+      "title": "A reliable revenue function",
+      "prompt": "Write total_revenue(prices) that returns the sum of a list of numeric prices and 0 for an empty list. Try [12, 8, 5] and [].",
+      "starter": "def total_revenue(prices):\n    pass\n",
+      "solution": "def total_revenue(prices):\n    return sum(prices)\n\nassert total_revenue([12, 8, 5]) == 25\nassert total_revenue([]) == 0",
+      "explanation": "sum naturally handles an empty iterable. Add tests for decimals and negative adjustments if your use case allows them."
+    },
+    {
+      "id": "py-missing",
+      "language": "Python",
+      "title": "Audit missing values",
+      "prompt": "For a pandas DataFrame df, calculate the percentage of missing values per column, sorted highest first.",
+      "starter": "import pandas as pd\n\n# df is your loaded dataset\n",
+      "solution": "missing_pct = df.isna().mean().mul(100).sort_values(ascending=False)\nprint(missing_pct)",
+      "explanation": "isna produces booleans. Their column mean is the missing proportion, which is converted to a percentage."
+    }
+  ]
+}
