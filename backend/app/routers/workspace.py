@@ -182,7 +182,7 @@ def validate_content(c):
         return False
     for key in ("modules", "questions", "projects", "exercises"):
         rows = c.get(key)
-        if not isinstance(rows, list) or not 0 < len(rows) < 500 or not all(isinstance(x, dict) and isinstance(x.get("id"), str) and re.fullmatch(r"[a-z0-9-]+", x["id"]) for x in rows) or len({x["id"] for x in rows}) != len(rows):
+        if not isinstance(rows, list) or not 0 < len(rows) <= 500 or not all(isinstance(x, dict) and isinstance(x.get("id"), str) and re.fullmatch(r"[a-z0-9-]+", x["id"]) for x in rows) or len({x["id"] for x in rows}) != len(rows):
             return False
     seen = set()
     for m in c["modules"]:
