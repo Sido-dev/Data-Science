@@ -1,8 +1,5 @@
-fastapi
-uvicorn
-sqlalchemy
-pydantic
-python-multipart
-python-jose[cryptography]
-passlib[bcrypt]
-psycopg2-binary
+fastapi>=0.115,<1
+uvicorn>=0.30,<1
+sqlalchemy>=2,<3
+pydantic>=2.9,<3
+psycopg2-binary>=2.9,<3
