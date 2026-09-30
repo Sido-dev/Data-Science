@@ -196,9 +196,8 @@ function Dashboard({ state, content, onPlan }) {
     hours = modules
       .filter((m) => !state.completed[m.id])
       .reduce((a, m) => a + m.hours, 0);
-  const relevant = new Set(modules.map((m) => m.id));
   const answers = content.questions
-    .filter((q) => relevant.has(q.module) && state.answers[q.id])
+    .filter((q) => state.answers[q.id])
     .map((q) => state.answers[q.id]);
   const weekActivity = state.activity.filter(
     (a) => Date.now() - new Date(a.at).getTime() < 7 * 86400000,
@@ -335,12 +334,10 @@ function Dashboard({ state, content, onPlan }) {
           <span>Knowledge checks</span>
           <strong>
             {answers.filter((a) => a.correct).length}
-            <small> / {answers.length} correct</small>
+            <small> / {content.questions.length} correct</small>
           </strong>
           <p>
-            {answers.length
-              ? "Review explanations in Practice"
-              : "Your first check is waiting"}
+            {answers.length} attempted · {content.questions.length - answers.length} remaining
           </p>
         </div>
         <div>
