@@ -1,99 +1,87 @@
-# DS-GenAI DayWise Learning Tracker
+# Data Science Learning Workspace — v2
 
-A full-stack application to manage a 6-month Data Science and GenAI learning roadmap. Track progress, manage daily tasks, and visualize your learning journey.
+A React/Vite learning workspace for analyst and scientist tracks, with a FastAPI/SQLAlchemy backend for optional private cloud backup and validated curriculum publishing. The active UI is `frontend/src/learning/LearningApp.jsx`; `frontend/src/App.jsx` exports it.
 
-## 🚀 Features
+Progress is saved in the browser by default. An account is optional and uses a **username and password**, not the older email-only login. The old roadmap/activity routers are not mounted by the current backend. Existing legacy database tables are not automatically migrated into v2 learning accounts or browser progress.
 
-- **Day-wise Roadmap**: 168 days of structured learning.
-- **Progress Tracking**: Mark days as Pending, In Progress, or Completed.
-- **Dashboard**: Visual stats, weekly progress graph, and streak counter.
-- **Notes & Code**: Built-in Monaco Editor for code snippets and notes for each day.
-- **Weekly Reminders**: Automatic prompts for revision and portfolio updates.
-- **Dark Mode**: Sleek UI with dark mode support.
+## Current behavior
 
-## 🛠️ Tech Stack
+- Choose a track, weekly study hours and experience level; work through modules, questions, exercises and projects.
+- Save completed modules, notes, answers, project milestones, exercise drafts and recent activity locally.
+- Export a JSON backup, preview an imported/cloud backup, then explicitly choose whether to restore it.
+- Optionally register/sign in under Settings & backup, upload this browser's progress, or preview a cloud backup. This is explicit backup/restore, not continuous automatic cross-device sync.
+- Validate/export curriculum JSON locally, or publish through the content screen using a server-side admin key. Opening `/admin` does not itself grant publishing permission.
 
-- **Frontend**: React, Vite, Tailwind CSS, Framer Motion, Recharts, Zustand, Lucide React.
-- **Backend**: FastAPI, SQLAlchemy, SQLite.
-- **Database**: SQLite (local) / PostgreSQL (production).
+## Local setup
 
-## 📂 Folder Structure
+The API tests for this update were run on Python 3.12.14 with the versions in `docs/VERIFICATION.md`. Use a separate virtual environment.
 
-```
-ds-genai-tracker/
-├── backend/                # FastAPI Backend
-│   ├── app/
-│   │   ├── routers/        # API Endpoints
-│   │   ├── models.py       # Database Models
-│   │   ├── schemas.py      # Pydantic Schemas
-│   │   ├── crud.py         # Database Operations
-│   │   └── main.py         # App Entry Point
-│   └── requirements.txt
-├── frontend/               # React Frontend
-│   ├── src/
-│   │   ├── components/     # UI Components
-│   │   ├── store/          # State Management
-│   │   └── App.jsx
-│   └── package.json
-└── README.md
-```
+From the repository root:
 
-## 🏃‍♂️ How to Run Locally
-
-### 1. Backend Setup
-
-```bash
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r backend/requirements-dev.txt
 cd backend
-pip install -r requirements.txt
-uvicorn app.main:app --reload
+uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
-The API will start at `http://127.0.0.1:8000`.
-*Note: On first run, it will automatically seed the database with the 168-day roadmap.*
 
-### 2. Frontend Setup
+On POSIX systems activate with `source .venv/bin/activate` before entering `backend/`.
 
-```bash
+In another terminal:
+
+```powershell
 cd frontend
-npm install
+npm ci
 npm run dev
 ```
-The app will start at `http://localhost:5173`.
 
-## 🌐 Deployment Guide
+Open `http://localhost:5173`. Vite proxies `/api` to `http://127.0.0.1:8000`. The frontend's checked-in lockfile is used by `npm ci`. The backend defaults to `sqlite:///./learning_tracker.db`, relative to its working directory, and creates the v2 tables on startup. It does not seed the historical 168-day roadmap. Back up an existing database before changing deployments.
 
-### Backend (Render)
+Browser-only learning does not require an account/backend. Backend cloud operations require connectivity. Frontend state and backend API tests are separate checks.
 
-1. Push this repository to GitHub.
-2. Create a new **Web Service** on [Render](https://render.com).
-3. Connect your GitHub repo.
-4. Settings:
-   - **Runtime**: Python 3
-   - **Build Command**: `pip install -r backend/requirements.txt`
-   - **Start Command**: `uvicorn backend.app.main:app --host 0.0.0.0 --port 10000`
-5. Add Environment Variable: `PYTHON_VERSION` = `3.9.0` (or similar).
+## Environment configuration
 
-### Frontend (GitHub Pages / Vercel)
+`backend/.env.example` documents the settings; the application does **not** automatically load that file. Set values in your shell or hosting environment.
 
-**Option A: Vercel (Recommended)**
-1. Go to [Vercel](https://vercel.com) and import your repo.
-2. Set **Root Directory** to `frontend`.
-3. Deploy.
-4. Add Environment Variable in Vercel:
-   - `VITE_API_URL`: Your Render Backend URL (e.g., `https://your-app.onrender.com`)
-   - *Note: You'll need to update `vite.config.js` or `axios` base URL to use this env var in production.*
+| Variable | Location | Meaning |
+|---|---|---|
+| `DATABASE_URL` | backend | SQLAlchemy connection URL; defaults to a local SQLite file. `postgres://` is normalized to `postgresql://`. |
+| `ALLOWED_ORIGINS` | backend | Comma-separated exact frontend origins, including scheme and optional port; no wildcard Vercel domain matching. |
+| `ADMIN_KEY` | backend | At least 32 characters; use a generated secret for curriculum publishing. Never expose it in a `VITE_` setting or commit it. |
+| `VITE_API_URL` | frontend build | Backend origin without `/api/v2`; the client appends that path. Rebuild/redeploy after changing it. |
 
-**Option B: GitHub Pages**
-1. Update `vite.config.js` base path if needed.
-2. Run `npm run build`.
-3. Deploy the `dist` folder using `gh-pages`.
+With no `VITE_API_URL` in a hosted production build, the UI keeps browser backup/import/export available and cloud backup is not configured. Development uses the Vite proxy.
 
-## 📝 Roadmap Overview
+## API v2
 
-- **Month 1**: Python + SQL
-- **Month 2**: Statistics + Power BI
-- **Month 3**: Machine Learning
-- **Month 4**: Deep Learning + NLP
-- **Month 5**: GenAI + Streamlit + APIs
-- **Month 6**: RAG + Capstone + Interview Prep
+| Method | Path | Access / behavior |
+|---|---|---|
+| GET | `/` | Process/service response with version 2.0.0; not a full database-readiness assertion |
+| POST | `/api/v2/auth/register` | Username/password; 201 returns token and normalized username |
+| POST | `/api/v2/auth/login` | Username/password; returns a new token |
+| POST | `/api/v2/auth/logout` | Bearer token; invalidates that session |
+| GET | `/api/v2/progress` | Bearer token; returns only that account's backup or null |
+| PUT | `/api/v2/progress` | Bearer token; validated `{"workspace": {...}}` |
+| GET | `/api/v2/content` | Public published curriculum, or the bundled JSON fallback |
+| PUT | `/api/v2/content` | `X-Admin-Key`; validates curriculum before replacing published content |
 
----
+Usernames contain 3–40 letters/digits/underscores and are normalized to lowercase. Password length is 12–128 characters. Session tokens expire after seven days; the backend stores token hashes. The frontend keeps its signed-in account token in session storage. Login/registration attempts have process-local limits of 20 per five minutes for both IP and normalized account. Requests over 2,000,000 bytes are rejected; backups and curriculum also have their own structural/serialized-size checks.
+
+Typical error statuses are 401 for missing/invalid/expired sessions, 403 for publishing without a valid admin key, 409 for duplicate usernames, 413 for excessive request bytes, 422 for invalid payloads, and 429 for authentication throttling.
+
+## Tests
+
+Run from the repository root after installing backend dev requirements:
+
+```powershell
+python -m pytest -q backend/tests backend/test_models.py
+```
+
+The suite forces disposable in-memory SQLite databases, overrides the database dependency, and resets rate-limit state per test. It never connects to a real `DATABASE_URL`. The old `backend/test_models.py` print-only table creation script is replaced with real assertions on a disposable schema; running it is not required for application startup.
+
+Coverage includes registration, password/token hashing, login/logout, expiry, private endpoints, cross-account backup isolation, malformed/oversized backups, publishing authorization and validation, throttle behavior, headers and bundled curriculum compatibility. See `docs/VERIFICATION.md` for the actual result and limits.
+
+## Deployment and scope
+
+See `DEPLOYMENT.md` for exact origins, setup and verification. A local test pass does not establish a successful hosted deployment. The API uses a process-local authentication limiter; stay on a single worker or introduce shared limiting before scaling. Versioned migrations, account recovery and broader deployment hardening are separate work. No new frontend behavior, model prediction or production certification is claimed by this update.

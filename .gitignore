@@ -11,3 +11,18 @@ build/
 .vscode/
 .idea/
 *.log
+
+# Local Python environments, tests and generated databases
+.venv/
+.pytest_cache/
+.coverage
+htmlcov/
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+*.sqlite3
+*.sqlite3-*
+.env.*
+!.env.example
+!**/.env.example
